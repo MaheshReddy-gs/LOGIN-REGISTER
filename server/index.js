@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const UserModel = require('./models/User')
+require("dotenv").config();
 
 const app = express()
 app.use(express.json())
@@ -14,8 +15,14 @@ app.use(cors({
     credentials: true
 }))
 app.use(cookieParser())
+const port =3001;
+const uri = process.env.MONGO_CONNECTION_STRING;
 
-mongoose.connect('mongodb://127.0.0.1:27017/employee');
+mongoose.connect('uri',{
+    userNewUrlParser:true,
+    userCreateIndex:true,
+    userUnifiedTopology:true,
+});
 
 const varifyUser = (req, res, next) => {
     const token = req.cookies.token;
@@ -72,6 +79,6 @@ app.post('/login', (req, res) => {
 })
 
 
-app.listen(3001, () => {
-    console.log("Server is Running")
+app.listen(port, () => {
+    console.log("Server is Running http://localhost:${port}")
 })
